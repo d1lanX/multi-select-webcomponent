@@ -5,6 +5,7 @@ export default class MultiselectWebcomponent extends HTMLElement {
   dropdown: HTMLDivElement = document.createElement('div');
   selected: HTMLDivElement = document.createElement('div');
   buttons: HTMLDivElement = document.createElement('div');
+  static formAssociated = true;
 
   constructor() {
     super();
