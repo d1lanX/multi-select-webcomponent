@@ -78,6 +78,16 @@ export default class MultiselectWebcomponent extends HTMLElement {
     this.build();
   }
 
+  get value(): string[] {
+    const ret = [];
+    for (const option of this.options) {
+      if (option.selected) {
+        ret.push(option.value);
+      }
+    }
+    return ret;
+  }
+
   private setValuesOnConstructor(value: string | null): void {
     if (!value) {
       return;
@@ -88,16 +98,6 @@ export default class MultiselectWebcomponent extends HTMLElement {
         option.selected = true;
       }
     }
-  }
-
-  get value(): string[] {
-    const ret = [];
-    for (const option of this.options) {
-      if (option.selected) {
-        ret.push(option.value);
-      }
-    }
-    return ret;
   }
 
   set disabled(value: boolean) {
