@@ -26,5 +26,8 @@
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.31.2",
     "typescript": "^4.2.4"
+  },
+  "devDependencies": {
+    "@types/web": "^0.0.142"
   }
 }
