@@ -6,9 +6,12 @@ export default class MultiselectWebcomponent extends HTMLElement {
   selected: HTMLDivElement = document.createElement('div');
   buttons: HTMLDivElement = document.createElement('div');
   static formAssociated = true;
+  value_: string[] = [];
+  internals_;
 
   constructor() {
     super();
+    this.internals_ = this.attachInternals();
 
     // Keeping options
     this.querySelectorAll('option').forEach(option => this.options.push(option.cloneNode(true) as HTMLOptionElement));
@@ -64,29 +67,14 @@ export default class MultiselectWebcomponent extends HTMLElement {
   }
 
   set value(value: string[]) {
-    for (const option of this.options) {
-      option.selected = false;
-    }
-    if (!value || value.length == 0) {
-      return;
-    }
-    for (const option of this.options) {
-      if (value.includes(option.value)) {
-        option.selected = true;
-      }
-    }
-    this.build();
+    this.value_ = value;
   }
 
   get value(): string[] {
-    const ret = [];
-    for (const option of this.options) {
-      if (option.selected) {
-        ret.push(option.value);
-      }
-    }
-    return ret;
+    return this.value_;
   }
+
+  get name(): string | null { return this.getAttribute('name') }
 
   private setValuesOnConstructor(value: string | null): void {
     if (!value) {
@@ -147,6 +135,18 @@ export default class MultiselectWebcomponent extends HTMLElement {
       this.buttons.appendChild(this.buildClearButton());
     }
     this.dispatchEvent(new Event('change'));
+    this.value_ = Array.from(this.options).reduce((acc: string[], option) => {
+      if (option.selected) {
+        acc.push(option.value);
+      }
+      return acc;
+    }, []);
+
+    const formData = new FormData();
+    for (const value of this.value_) {
+      formData.append(this.getAttribute('name') || '', value);
+    }
+    this.internals_.setFormValue(formData);
   }
 
   private buildSelectedItem(option: HTMLOptionElement): HTMLDivElement {
