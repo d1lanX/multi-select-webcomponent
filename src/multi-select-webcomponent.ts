@@ -142,11 +142,13 @@ export default class MultiselectWebcomponent extends HTMLElement {
       return acc;
     }, []);
 
-    const formData = new FormData();
-    for (const value of this.value_) {
-      formData.append(this.getAttribute('name') || '', value);
+    if (this.getAttribute('name') !== null) {
+      const formData = new FormData();
+      for (const value of this.value_) {
+        formData.append(this.getAttribute('name') || '', value);
+      }
+      this.internals_.setFormValue(formData);
     }
-    this.internals_.setFormValue(formData);
   }
 
   private buildSelectedItem(option: HTMLOptionElement): HTMLDivElement {
